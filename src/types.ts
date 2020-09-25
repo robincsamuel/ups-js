@@ -5,6 +5,15 @@ type DefaultInfoFormat<C, D> = {
   Description: D;
 };
 type DefaultInfoFormatGeneric = DefaultInfoFormat<string, string>;
+
+export interface Config {
+  username: string;
+  password: string;
+  licenseNumber: string;
+  isSandbox: boolean;
+  timeout?: number;
+  version?: string;
+}
 export namespace Response {
   export interface Server<T> {
     data: T;

@@ -4,11 +4,13 @@ import {
   UPSFetchClientError,
   UPSFetchServerError
 } from '../errors';
-import { Response, Request } from '../types';
+import { Config, Response, Request } from '../types';
+import Shipment from './Shipment';
 
-const ENDPOINT_TEST = (v: string) => `https://wwwcie.ups.com/ship/${v}`;
-const ENDPOINT_PRODUCTION = (v: string) =>
-  `https://onlinetools.ups.com/ship/${v}`;
+const ENDPOINT_TEST = (version: string) =>
+  `https://wwwcie.ups.com/ship/${version}`;
+const ENDPOINT_PRODUCTION = (version: string) =>
+  `https://onlinetools.ups.com/ship/${version}`;
 
 class UPS {
   private isSandbox: boolean;
@@ -16,33 +18,28 @@ class UPS {
   private username: string;
   private password: string;
   private licenseNumber: string;
+  private version: string;
 
-  constructor(
-    username: string,
-    password: string,
-    licenseNumber: string,
-    isSandbox: boolean,
-    timeout = 10000
-  ) {
-    this.isSandbox = isSandbox;
-    this.timeout = timeout;
-    this.username = username;
-    this.password = password;
-    this.licenseNumber = licenseNumber;
+  constructor(config: Config) {
+    this.username = config.username;
+    this.password = config.password;
+    this.licenseNumber = config.licenseNumber;
+    this.isSandbox = config.isSandbox;
+    this.version = config.version || 'v1';
+    this.timeout = config.timeout || 10000;
   }
 
   public async fetch<T = any>(
     url: string,
     method: Method = 'POST',
     params: AxiosRequestConfig['params'] = {},
-    data: AxiosRequestConfig['data'] = {},
-    version = 'v1'
+    data: AxiosRequestConfig['data'] = {}
   ) {
     return axios
       .request<any, Response.Server<T>>({
         baseURL: this.isSandbox
-          ? ENDPOINT_TEST(version)
-          : ENDPOINT_PRODUCTION(version),
+          ? ENDPOINT_TEST(this.version)
+          : ENDPOINT_PRODUCTION(this.version),
         method,
         url,
         timeout: this.timeout,
@@ -84,22 +81,8 @@ class UPS {
         }
       });
   }
-  /**
-   * @param data Shipment info
-   * @param addressValidation Validation will include a city
-   */
-  public async createShipment(
-    data: Request.CreateShipment,
-    addressValidation = false
-  ) {
-    return this.fetch<Response.CreateShipment>(
-      '/shipments',
-      'POST',
-      addressValidation ? { additionaladdressvalidation: 'city' } : {},
-      data,
-      'v1801'
-    );
-  }
+
+  shipment = new Shipment(this);
 }
 
 export default UPS;

@@ -8,23 +8,35 @@
 A JavaScript library to interface with UPS API, it works with Node.js. The [documentation can be found here](https://jonyw4.github.io/ups-js/).
 
 ## 🌟 Features
+
 This library its in **early stages**, so it doesn't have interfaces for all UPS features (Your PR is very welcome).
 
 With this library you can:
+
 - Create Shipment
 
 ## 📖 How to use?
+
 Install the library
+
 ```bash
 npm i ups-js
 ```
 
 Import the library
+
 ```typescript
 import UPS from 'ups-js';
 
-const ups = new UPS(token, isSandbox, timeout);
-const response = await ups.createShipment({...});
+const config = {
+  username: 'UPSUSERNAME',
+  password: 'UPSUSERNAME',
+  licenseNumber: 'UPSACCESSKEY',
+  isSandbox: true
+};
+
+const ups = new UPS(config);
+const response = await ups.shipment.create({...});
 ```
 
 ## 📚 API Docs
@@ -36,6 +48,7 @@ used through API calls.
 For a detailed documentation, see our [Documentation](https://jonyw4.github.io/ups-js/).
 
 ## 😍 Do you like?
-*Please, consider supporting my work as a lot of effort takes place to create this repo! Thanks a lot.*
+
+_Please, consider supporting my work as a lot of effort takes place to create this repo! Thanks a lot._
 
 <a href="https://www.buymeacoffee.com/jonycelio" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>

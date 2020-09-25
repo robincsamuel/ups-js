@@ -1,9 +1,17 @@
 import axios from 'axios';
-import UPS from './index';
+import UPS from '../index';
 
 jest.mock('axios');
 // @ts-ignore
 axios.request.mockResolvedValue();
+
+const config = {
+  username: 'u',
+  password: 'p',
+  licenseNumber: 'l',
+  isSandbox: true,
+  version: 'v1801'
+};
 
 const data = {
   ShipmentRequest: {
@@ -114,11 +122,11 @@ const data = {
   }
 };
 
-describe('UPS.createShipment()', () => {
+describe('UPS.shipment.create()', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it('should call createShipment with package with success', async () => {
+  it('should call shipment.create with package with success', async () => {
     // @ts-ignore
     axios.request.mockImplementationOnce(() =>
       Promise.resolve({
@@ -126,8 +134,8 @@ describe('UPS.createShipment()', () => {
       })
     );
 
-    const ups = new UPS('u', 'p', 'l', true);
-    const response = await ups.createShipment(data);
+    const ups = new UPS(config);
+    const response = await ups.shipment.create(data);
     expect(response).toEqual([{}]);
     expect(axios.request).toHaveBeenCalledTimes(1);
     expect(axios.request).toHaveBeenCalledWith({

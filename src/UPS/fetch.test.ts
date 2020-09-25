@@ -11,6 +11,13 @@ jest.mock('axios');
 // @ts-ignore
 axios.request.mockResolvedValue();
 
+const config = {
+  username: 'u',
+  password: 'p',
+  licenseNumber: 'l',
+  isSandbox: true
+};
+
 describe('UPS.fetch()', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -23,7 +30,7 @@ describe('UPS.fetch()', () => {
       })
     );
 
-    const ups = new UPS('u', 'p', 'l', true);
+    const ups = new UPS(config);
     const response = await ups.fetch('/token', 'GET', {}, {});
 
     expect(response).toEqual({ test: 'test' });
@@ -54,16 +61,16 @@ describe('UPS.fetch()', () => {
   it('should fetch an UPSOtherError from UPS API', async () => {
     // @ts-ignore
     axios.request.mockRejectedValue(new AxiosTestError({}));
-    const me = new UPS('u', 'p', 'l', true);
-    const fetch = me.fetch('/test', 'GET');
+    const ups = new UPS(config);
+    const fetch = ups.fetch('/test', 'GET');
     await expect(fetch).rejects.toThrow(UPSFetchOtherError);
   });
 
   it('should fetch an UPSFetchClientError from UPS API', async () => {
     // @ts-ignore
     axios.request.mockRejectedValue(new AxiosTestError({ request: {} }));
-    const me = new UPS('u', 'p', 'l', true);
-    const fetch = me.fetch('/test', 'GET');
+    const ups = new UPS(config);
+    const fetch = ups.fetch('/test', 'GET');
     await expect(fetch).rejects.toThrow(UPSFetchClientError);
   });
 
@@ -72,8 +79,8 @@ describe('UPS.fetch()', () => {
     axios.request.mockRejectedValue(
       new AxiosTestError({ response: { status: '404' } })
     );
-    const me = new UPS('u', 'p', 'l', true);
-    const fetch = me.fetch('/test', 'GET');
+    const ups = new UPS(config);
+    const fetch = ups.fetch('/test', 'GET');
     await expect(fetch).rejects.toThrow(UPSFetchServerError);
   });
 });
