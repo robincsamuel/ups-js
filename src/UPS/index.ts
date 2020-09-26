@@ -5,7 +5,9 @@ import {
   UPSFetchServerError
 } from '../errors';
 import { Config, Response, Request } from '../types';
+
 import Shipment from './Shipment';
+import Package from './Package';
 
 const ENDPOINT_TEST = (version: string) =>
   `https://wwwcie.ups.com/ship/${version}`;
@@ -83,6 +85,7 @@ class UPS {
   }
 
   shipment = new Shipment(this);
+  package = new Package(this);
 }
 
 export default UPS;

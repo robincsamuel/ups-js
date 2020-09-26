@@ -1,17 +1,18 @@
-import UPS from '../../src';
+import UPS from '../../../src';
 
 const TIMEOUT = 20000;
 test(
   'call calculateShipment and check response',
   async () => {
-    const ups = new UPS(
-      String(process.env.API_USERNAME),
-      String(process.env.API_PASSWORD),
-      String(process.env.API_LICENSE_NUMBER),
-      true,
-      TIMEOUT
-    );
-    const response = await ups.createShipment({
+    const ups = new UPS({
+      username: String(process.env.API_USERNAME),
+      password: String(process.env.API_PASSWORD),
+      licenseNumber: String(process.env.API_LICENSE_NUMBER),
+      isSandbox: true,
+      timeout: TIMEOUT
+    });
+
+    const response = await ups.shipment.create({
       ShipmentRequest: {
         Shipment: {
           Description: '1206 PTR',

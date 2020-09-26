@@ -1,2 +1,1 @@
-import UPS from './UPS';
-export default UPS;
+export { default } from './UPS';

@@ -380,7 +380,9 @@ export namespace Request {
            *
            * M6 = Economy Mail Innovations
            *
-           * M7 = MaiI Innovations (MI) Returns 70 = UPS Access Point™ Economy
+           * M7 = MaiI Innovations (MI) Returns
+           *
+           * 70 = UPS Access Point™ Economy
            *
            * 71 = UPS Worldwide Express Freight Midday
            *
